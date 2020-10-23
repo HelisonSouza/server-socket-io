@@ -15,12 +15,45 @@
 <body>
   <script src="socket.io/socket.io.js"></script>
 
-  <button>Simula Produto OK</button>
-  <button>Simula Produto com Defeito</button>
-  <button>Simula Parada</button>
+  <button class="button1" type="button" id="ok">Simula Produto OK</button>
+  <br>
+  <br>
+  <button class="button3" type="button" id="defeito">Simula Produto com Defeito</button>
+  <br>
+  <br>
+  <button class="button2" type="button" id="stop">Simula Parada</button>
   <script type="text/javascript">
     window.onload = () => {
       const socket = io('http://localhost:3000')
+
+      const btnOk = document.getElementById('ok')
+      const btnDefeito = document.getElementById('defeito')
+      const btnParada = document.getElementById('stop')
+
+      btnOk.addEventListener('click', () => {
+        socket.emit('evento', 'Produto OK')
+      })
+      btnDefeito.addEventListener('click', () => {
+        socket.emit('evento', 'Produto com Defeito')
+        console.log('defeito')
+      })
+
+      var intervalo = 0
+      var start
+      btnParada.addEventListener('mousedown', () => {
+        start = setInterval(function () {
+          intervalo++
+        }, 1000)
+        console.log('Inicio parada')
+      })
+      btnParada.addEventListener('mouseup', () => {
+        if (intervalo > 0) {
+          socket.emit('evento', `Parada de ${intervalo} segundos registrada`)
+        }
+        console.log('Fim parada' + '   ' + intervalo)
+        intervalo = 0
+        clearInterval(start)
+      })
     }
   </script>
 
