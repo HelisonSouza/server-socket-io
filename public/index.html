@@ -30,13 +30,42 @@
       const btnDefeito = document.getElementById('defeito')
       const btnParada = document.getElementById('stop')
 
-      btnOk.addEventListener('click', () => {
-        socket.emit('evento', 'Produto OK')
+      socket.on('connect', () => {
+        console.log(`Conectado: ${socket.id}`)
+        socket.emit('teste', socket.id)
+
+        btnOk.addEventListener('click', () => {
+          console.log('produto OK')
+          socket.emit('evento', {
+            nome: 'Produto OK',
+            valor: 72
+          })
+        })
+
+        btnDefeito.addEventListener('click', () => {
+          socket.emit('evento', {
+            nome: 'Produto com Defeito',
+            valor: 1
+          })
+          console.log('defeito')
+        })
+
       })
-      btnDefeito.addEventListener('click', () => {
-        socket.emit('evento', 'Produto com Defeito')
-        console.log('defeito')
+
+      
+
+      const dadosProducao = socket.on('producaoDados', (dadosRecebidos) => {
+        return dadosRecebidos
       })
+      console.log(dadosProducao)
+      if (dadosProducao) {
+        var quantidade = dadosProducao.qtd_produzida
+        var id = dadosProducao.id 
+      } else {
+        var quantidade = socket.on('qtdProduzida', (valor) => {
+        return valor
+      })
+      }
 
       var intervalo = 0
       var start
