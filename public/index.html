@@ -60,9 +60,6 @@
             socket.emit('evento', {                           //Emite um evento
               nome: 'Produto OK',                             //Informa o nome do evento
             })
-            setTimeout(() => {
-              console.log("Running....")
-            }, 500)
           }
         })
 
@@ -88,6 +85,9 @@
               intervalo++
             }, 1000)
             console.log('Inicio parada')
+            socket.emit('evento', {
+              nome: 'Inicio Parada'
+            })
           }
         })
         btnParada.addEventListener('mouseup', () => {
@@ -95,7 +95,10 @@
             console.log("Produção não inicializada")
           } else {
             if (intervalo > 0) {
-              socket.emit('evento', `Parada de ${intervalo} segundos registrada`)
+              socket.emit('evento', {
+                nome: 'Fim Parada',
+                duracao: intervalo
+              })
             }
           }
           console.log('Fim parada' + '   ' + intervalo)
